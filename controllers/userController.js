@@ -88,8 +88,6 @@ exports.editUser = async(req, res) => {
 exports.deleteUser = async(req, res) => {
     try {
         const userId = req.params.userId;
-
-
         await User.findOneAndDelete({ _id: userId });
         res.json({ message: 'User deleted successfully' });
     } catch (error) {
