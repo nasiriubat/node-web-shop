@@ -13,3 +13,25 @@ Features :
 9. payment gateway ---
 10. send email (order status) ---
 
+
+-----------------------------------------------------
+
+---------------API Endpoint------------------
+
+1. Place order :  {{url}}/order/place-order
+Data :
+{
+  "user_id": "655e7834b0bdc39a29ca9059",
+  "products": [
+    {
+      "product_id": "655e68ba5fafe98a459948f6",
+      "quantity": 2
+    },
+    {
+      "product_id": "655e68bc5fafe98a459948f9",
+      "quantity": 1
+    }
+  ]
+}
+
+

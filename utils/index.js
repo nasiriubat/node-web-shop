@@ -1,3 +1,7 @@
+const Product = require("../models/product");
+const mongoose = require('mongoose');
+
+
 exports.generateOrderId = () => {
     return 'ORD_' + Math.random().toString(36).substr(2, 9);
 };
@@ -21,7 +25,7 @@ exports.organizeError = (errorString) => {
 
 }
 
-exports.isBlank = (input) => {
+exports.isBlank = (input, mongo = false) => {
     if (
         input === null ||
         input === undefined ||
@@ -29,10 +33,35 @@ exports.isBlank = (input) => {
         input === 0 ||
         (typeof input === 'string' && input.trim() === '') ||
         (Array.isArray(input) && input.length === 0) ||
-        (typeof input === 'object' && Object.keys(input).length === 0)
-    ) {
-        return true;
+        (typeof input === 'object' && Object.keys(input).length === 0)) {
+        if (mongo && (!mongoose.Types.ObjectId.isValid(input))) {
+            return true;
+        } else {
+            return true;
+        }
     }
 
     return false;
+}
+
+exports.checkAdmin = (req) => {
+    if (req.user.role == 'admin') {
+        return true
+    }
+    return false
+};
+exports.getProduct = async(_id) => {
+    const product = await Product.findOne({ _id });
+    return product;
+};
+
+exports.delayedData = async(data, model, primaryKey) => {
+    const json = await Promise.all(
+        data.map(async(item) => {
+            const search_id = item[primaryKey];
+            const product = await model.findOne({ _id: search_id })
+            return product;
+        }))
+
+    return json;
 }
